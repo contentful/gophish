@@ -1,0 +1,29 @@
+version: '2'
+services:
+  traefik:
+    image: traefik:v1.7.12
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/traefik/traefik.toml:/traefik.toml
+      - /opt/traefik/acme.json:/acme.json
+    container_name: traefik
+
+  gophish:
+    image: contentful/gophish
+    restart: always
+    ports:
+      - 3333:3333
+    networks:
+      - web
+    volumes:
+      - ./data:/data
+
+networks:
+  web:
+    external: true
